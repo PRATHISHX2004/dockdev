@@ -1,0 +1,14 @@
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: {{.Prefix}}_nginx
+    volumes:
+      - ./conf/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./app:/var/www/html:ro
+    networks:
+      {{.NetworkName}}:
+        ipv4_address: {{.ProjectIP}}
+
+networks:
+  {{.NetworkName}}:
+    external: true
