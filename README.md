@@ -42,13 +42,7 @@ cd dockdev
 
 3. Build the binary (choose based on your OS)::
 
-🔧 For WSL:
-Run `./build.sh`
-
-Make sure the file is executable:
-`chmod +x build.sh`
-
-🪟 For Windows (CMD or PowerShell):
+🪟 For Windows (CMD):
 Run `build.bat`
 
 > This produces a Linux-compatible binary you can run inside WSL2 or Linux servers.
@@ -57,17 +51,27 @@ Run `build.bat`
 
 ## ⚙️ Setup
 
-### Required files:
+### Copy required files and folders:
 
-#### `.env`
-```env
-NETWORK_NAME=local_net
-SUBNET=10.0.100.0/24
-REVERSE_PROXY_IP=10.0.100.2
-PROJECT_START_IP=10.0.100.10
-```
+> All from folder dist to your WSL
+
+- `.env`
+- `dockdev`
+- `templates`
+- `shared-services`
 
 ---
+## 💡 Before you start!
+
+> If your index application folder is `public` or another, update `nginx.conf`
+>
+> For example: `root /var/www/html/public;`
+>
+> 1. You can update it before adding new project in `templates/nginx.conf.tmpl` for all projects
+> 
+> 2. or after, directly in `domains/YOUR_DOMAIN/conf/nginx/default.conf` 
+> #### If #2 - Don't forget to remove and run project containers manually!
+
 
 ## 🚀 Usage
 
@@ -96,8 +100,9 @@ PROJECT_START_IP=10.0.100.10
   - reverse proxy config in `shared-services/sites`
 - Update:
   - `.ipmap.env` > This file just FYI
-  - `Windows hosts` file[docker-compose.yml.tmpl](templates/docker-compose.yml.tmpl)
+  - `Windows hosts` file
 
+> Your application must be in  `app` folder: `domains/YOUR_DOMAIN/app`
 ---
 
 ### 🗑 Remove a project

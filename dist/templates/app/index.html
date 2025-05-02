@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{.Domain}} - Your App Works!</title>
+    <style>
+        html, body{
+           margin: 0;
+           padding: 0;     
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            font-family: "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e1e2f, #3a3a5d);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 0.5em;
+        }
+
+        p {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+
+        code {
+            background: rgba(255,255,255,0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to <code>{{.Domain}}</code> 👋</h1>
+        <p>Your development environment is up and running.<br>Happy coding!</p>
+    </div>
+</body>
+</html>
